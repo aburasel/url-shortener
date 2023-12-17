@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('long_url',255);
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->integer('visit_count')->default(0);
-            $table->timestamp('time')->useCurrent();
+            $table->timestamps();
             $table->unique(['user_id','long_url']);
         });
     }

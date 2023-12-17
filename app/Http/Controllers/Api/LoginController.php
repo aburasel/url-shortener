@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
+use App\Http\Resources\UserResource;
 use App\Http\Traits\ResponseAPI;
 use App\Models\User;
 use Exception;
@@ -21,7 +22,7 @@ class LoginController extends Controller
 
         try {
             $user = User::create($validated);
-            return $this->success('Successfully Registered', ['user' => $user], Response::HTTP_OK);
+            return $this->success('Successfully Registered', ['user' => new UserResource($user)], Response::HTTP_OK);
         } catch (Exception $e) {
             $this->error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -38,7 +39,7 @@ class LoginController extends Controller
 
             $user = User::where('email', $validated['email'])->first();
             $token = $request->user()->createToken('mobile-token')->plainTextToken;
-            return $this->success('Login successful', ['token' => $token, 'token_type' => 'Bearer', 'user' => $user], Response::HTTP_OK);
+            return $this->success('Login successful', ['token' => $token, 'token_type' => 'Bearer', 'user' => new UserResource($user)], Response::HTTP_OK);
 
         } catch (Exception $e) {
             $this->error($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);

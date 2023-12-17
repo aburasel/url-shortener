@@ -10,7 +10,7 @@ class Url extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -36,7 +36,8 @@ class Url extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'time' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
