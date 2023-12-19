@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ShortenUrlRequest extends FormRequest
 {
     use ResponseAPI;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -28,13 +29,13 @@ class ShortenUrlRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'url' => ['required', 'max:255','min:8', new Url],
+            'url' => ['required', 'max:255', 'min:8', new Url],
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        $message = implode(" ", $validator->getMessageBag()->all());
+        $message = implode(' ', $validator->getMessageBag()->all());
         throw new HttpResponseException($this->error($message, Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 }

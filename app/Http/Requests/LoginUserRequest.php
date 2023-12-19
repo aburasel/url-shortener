@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class LoginUserRequest extends FormRequest
 {
     use ResponseAPI;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -35,7 +36,7 @@ class LoginUserRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        $message = implode(" ", $validator->getMessageBag()->all());
+        $message = implode(' ', $validator->getMessageBag()->all());
         throw new HttpResponseException($this->error($message, Response::HTTP_UNPROCESSABLE_ENTITY));
     }
 }

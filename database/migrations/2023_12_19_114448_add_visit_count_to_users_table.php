@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name', 32);
-            $table->string('email', 32)->unique();
-            $table->string('password', 36);
-            $table->rememberToken();
-            $table->timestamps();
+        Schema::table('urls', function (Blueprint $table) {
+            $table->integer('visit_count')->after('user_id')->default(0);
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::table('urls', function (Blueprint $table) {
+            $table->dropColumn('visit_count');
+        });
     }
 };

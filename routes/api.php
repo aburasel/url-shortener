@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\LoginController;
-use App\Http\Controllers\Api\UrlShorteningController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,12 +13,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
  */
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::POST('/url/shortening', [UrlShorteningController::class, 'shortenUrl'])->name('url.shorten');
-    Route::GET('/urls', [UrlShorteningController::class, 'index'])->name('urls');
-});
-
 
 Route::middleware('guest:api')->group(function () {
 

@@ -14,6 +14,7 @@ use Throwable;
 class Handler extends ExceptionHandler
 {
     use ResponseAPI;
+
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -38,13 +39,12 @@ class Handler extends ExceptionHandler
                 if ($e instanceof NotFoundHttpException) {
                     return $this->error('Not found', Response::HTTP_NOT_FOUND);
                 }if ($e instanceof AuthenticationException) {
-                    return $this->error($e->getMessage() . get_class($e), Response::HTTP_UNAUTHORIZED);
+                    return $this->error($e->getMessage().get_class($e), Response::HTTP_UNAUTHORIZED);
                 } else {
-                    return $this->error($e->getMessage() . get_class($e), Response::HTTP_BAD_REQUEST);
+                    return $this->error($e->getMessage().get_class($e), Response::HTTP_BAD_REQUEST);
                 }
 
             }
         });
     }
-
 }

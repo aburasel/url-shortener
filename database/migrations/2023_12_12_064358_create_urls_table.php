@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('urls', function (Blueprint $table) {
             $table->id();
-            $table->string('short_url',64);
-            $table->string('long_url',255);
+            $table->string('short_url', 64);
+            $table->string('long_url', 255);
             $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
-            $table->integer('visit_count')->default(0);
             $table->timestamps();
-            $table->unique(['user_id','long_url']);
+            $table->unique(['user_id', 'long_url']);
         });
     }
 

@@ -26,7 +26,8 @@ class UrlController extends Controller
         if ($url == null) {
             abort(404);
         } else {
-            $url->increment('visit_count');
+            $url->increment('visit_count'); // Written when API version 2 released
+
             return redirect($url->long_url);
         }
 

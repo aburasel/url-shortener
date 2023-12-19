@@ -17,7 +17,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-    'write_eloquent_model_mixins'=>true,
+    'write_eloquent_model_mixins' => true,
     /*
     |--------------------------------------------------------------------------
     | Application Environment

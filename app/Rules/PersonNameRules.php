@@ -14,7 +14,7 @@ class PersonNameRules implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!preg_match('/^[a-zA-Z\s]*$/', $value)) {
+        if (! preg_match('/^[a-zA-Z\s]*$/', $value)) {
             $fail('Please select a valid name, do not use special chars.');
         }
     }

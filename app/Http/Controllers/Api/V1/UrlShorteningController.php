@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShortenUrlRequest;
@@ -8,13 +8,14 @@ use App\Http\Resources\UrlResource;
 use App\Http\Traits\ResponseAPI;
 use App\Models\Url;
 use App\MyApp;
+use App\Services\UrlService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class UrlShorteningController extends Controller
 {
     use ResponseAPI;
+
     /**
      * Display a listing of the resource.
      */
@@ -22,43 +23,34 @@ class UrlShorteningController extends Controller
     {
         $this->authorize('viewAny', Url::class);
         $urls = Url::where(['user_id' => $request->user()->id])->get();
+
         return $this->success('All urls loaded successfully', UrlResource::collection($urls), Response::HTTP_OK);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    
-
-    public function shortenUrl(ShortenUrlRequest $request)
+    public function shortenUrl(ShortenUrlRequest $request, UrlService $urlService)
     {
         $validated = $request->validated();
 
-        $existingShortenedUrl = Url::where([
+        $existingShortenedUrl = $urlService->getUrl([
             'long_url' => $validated['url'],
-            //'user_id' => $request->user()->id,
-        ])->first();
+        ]);
 
-        if (!$existingShortenedUrl) {
-            $shortUrlHash = Str::random(8);
+        if (! $existingShortenedUrl) {
+            $data = array_merge(['user_id' => $request->user()->id], $validated);
+            $shortenedUrl = $urlService->createShortUrl($data);
 
-            $anUrl = [
-                'long_url' => $validated['url'],
-                'short_url' => $shortUrlHash,
-                'user_id' => $request->user()->id,
-            ];
-
-            Url::create($anUrl);
             return $this->success('Shortened successfully', [
-                'long_url' => $validated['url'],
-                'short_url' => MyApp::BASE_URL . $shortUrlHash,
+                'long_url' => $shortenedUrl['long_url'],
+                'short_url' => MyApp::BASE_URL.$shortenedUrl['short_url'],
             ], Response::HTTP_OK);
         } else {
             return $this->success('Shortened successfully', [
                 'long_url' => $validated['url'],
-                'short_url' => MyApp::BASE_URL . $existingShortenedUrl['short_url'],
+                'short_url' => MyApp::BASE_URL.$existingShortenedUrl['short_url'],
             ], Response::HTTP_OK);
         }
     }
-
 }
